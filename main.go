@@ -1,6 +1,7 @@
 package main
 
 import (
+	"booking-app/helper"
 	"fmt"
 	"strings"
 )
@@ -25,7 +26,7 @@ func main() {
 	for {
 		firstName, lastName, email, userTickets := getUserInput()
 		// in GO you can return multiple values from func(), in that case = 3
-		isValidTicketsNumber, isValidName, isValidEmail := validateUserInput(userTickets, firstName, lastName, email)
+		isValidTicketsNumber, isValidName, isValidEmail := helper.ValidateUserInput(userTickets, firstName, lastName, email, remainingTickets)
 
 		// you can use ":=" instead of "=" if you don't want to write "var"
 		if isValidTicketsNumber && isValidName && isValidEmail {
@@ -77,15 +78,6 @@ func getFirstNames(bookings []string) []string {
 
 	//fmt.Printf("The first names of  bookings are: %v\n", firstNames)
 	return firstNames
-}
-
-func validateUserInput(userTickets uint, firstName string, lastName string, email string) (bool, bool, bool) {
-	var isValidTicketsNumber = userTickets <= remainingTickets && remainingTickets > 0
-	var isValidName = len(firstName) >= 2 && len(lastName) >= 2
-	isValidEmail := strings.Contains(email, "@")
-
-	return isValidTicketsNumber, isValidName, isValidEmail
-
 }
 
 func getUserInput() (string, string, string, uint) {
