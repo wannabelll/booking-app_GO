@@ -3,7 +3,7 @@ package main
 import (
 	"booking-app/helper"
 	"fmt"
-	"strings"
+	"strconv"
 )
 
 // package-level vars must be declared with "var" and "=" sign
@@ -14,7 +14,8 @@ const conferenceTickets int = 50
 var remainingTickets uint = 50
 
 // var bookings [50]string
-var bookings []string
+// list of maps which can be extended auto if it required
+var bookings = make([]map[string]string, 0)
 
 func main() {
 	//all vars (or package) must be used in GO
@@ -34,7 +35,7 @@ func main() {
 			bookTicket(userTickets, firstName, lastName, email)
 			// function to print first names from "booking" slice
 			//PrintFirstNames(bookings)
-			firstNames := getFirstNames(bookings)
+			firstNames := getFirstNames()
 
 			fmt.Printf("The first names of  bookings are: %v\n", firstNames)
 
@@ -68,11 +69,10 @@ func greetUsers() {
 }
 
 // bookings []string = internal parameters but the second "[]string" is output parameters
-func getFirstNames(bookings []string) []string {
+func getFirstNames() []string {
 	firstNames := []string{}
 	for _, booking := range bookings {
-		var names = strings.Fields(booking)
-		firstNames = append(firstNames, names[0])
+		firstNames = append(firstNames, booking["firstName"])
 		// fmt.Println(index)   "_" means that we ignore "index"
 	}
 
@@ -109,8 +109,17 @@ func getUserInput() (string, string, string, uint) {
 
 func bookTicket(userTickets uint, firstName string, lastName string, email string) {
 	remainingTickets = remainingTickets - userTickets
-	bookings = append(bookings, firstName+" "+lastName)
 
+	// create an empty map for a user (you can't data types)
+
+	var userData = make(map[string]string)
+	userData["firstName"] = firstName
+	userData["lastName"] = lastName
+	userData["email"] = email
+	userData["numberOfTickets"] = strconv.FormatUint(uint64(userTickets), 10)
+
+	bookings = append(bookings, userData)
+	fmt.Printf("List of bookings is %v\n", bookings)
 	/*fmt.Printf("The whole array: %v\n", bookings)
 	fmt.Printf("The 1st element of array: %v\n", bookings[0])
 	fmt.Printf("The type array: %T\n", bookings)
